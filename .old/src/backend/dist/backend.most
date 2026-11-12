@@ -1,0 +1,162 @@
+// Version: 1.0.0
+type AccountId__552256128 = Nat;
+type AccountType__1027383555 = {#Investment; #Liquid};
+type Account__1026151617 =
+  {
+    accountType : AccountType__1027383555;
+    var balance : Nat;
+    createdAt : Timestamp__301639476;
+    currency : Text;
+    id : AccountId__552256128;
+    institution : Text;
+    isDemo : Bool;
+    name : Text;
+    owner : UserId__158757552
+  };
+type AssetClass__104098425 = {#Bond; #Cash; #Crypto; #ETF; #Stock};
+type AssetId__131908388 = Nat;
+type Asset__320185087 =
+  {
+    assetClass : AssetClass__104098425;
+    createdAt : Timestamp__301639476;
+    expectedYieldPct : Float;
+    id : AssetId__131908388;
+    isDemo : Bool;
+    isFortress : Bool;
+    linkedAccountId : ?AccountId__552256128;
+    name : Text;
+    owner : UserId__158757552;
+    ticker : Text
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type DemoState__619124995 =
+  {var demoLoadedAt : Timestamp__301639476; var isDemo : Bool};
+type DetectedTradeId__307777555 = Nat;
+type DetectedTrade__518668811 =
+  {
+    amount : Float;
+    assetClass : AssetClass__104098425;
+    assetName : Text;
+    confidence : Float;
+    currency : Text;
+    detectedAt : Timestamp__301639476;
+    id : DetectedTradeId__307777555;
+    isDemo : Bool;
+    owner : UserId__158757552;
+    price : Float;
+    rawText : Text;
+    tradeType : TradeType__991414300
+  };
+type EmailScanSettings__505180725 =
+  {
+    isEnabled : Bool;
+    lastScanAt : ?Timestamp__301639476;
+    scanIntervalMinutes : Nat
+  };
+type ExchangeRate__285633847 =
+  {var rateNgnPerUsd : Float; var updatedAt : Timestamp__301639476};
+type HoldingId__270126229 = Nat;
+type Holding__808695228 =
+  {
+    accountId : AccountId__552256128;
+    assetId : AssetId__131908388;
+    createdAt : Timestamp__301639476;
+    id : HoldingId__270126229;
+    isDemo : Bool;
+    owner : UserId__158757552;
+    purchaseDate : Timestamp__301639476;
+    var purchasePrice : Float;
+    var quantity : Float
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NetWorthSnapshot__498577929 =
+  {
+    isDemo : Bool;
+    timestamp : Timestamp__301639476;
+    totalValueNgn : Float;
+    totalValueUsd : Float
+  };
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type PriceEntry__416406618 =
+  {currency : Text; var price : Float; var updatedAt : Timestamp__301639476};
+type Timestamp__301639476 = Int;
+type TradeType__991414300 = {#Buy; #Sell};
+type TransactionCategory__870659409 =
+  {#Dividend; #Expense; #Income; #Interest; #Investment; #Transfer};
+type TransactionId__138870153 = Nat;
+type Transaction__822992244 =
+  {
+    accountId : AccountId__552256128;
+    amount : Nat;
+    category : TransactionCategory__870659409;
+    createdAt : Timestamp__301639476;
+    date : Timestamp__301639476;
+    description : Text;
+    id : TransactionId__138870153;
+    isDemo : Bool;
+    owner : UserId__158757552
+  };
+type UserId__158757552 = Principal;
+type UserRole__1073662873 = {#admin; #guest; #user};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1073662873>
+    };
+  stable accountState :
+    {
+      accounts : List__415060402<Account__1026151617>;
+      nextAccountId : {var val : Nat}
+    };
+  stable assetState :
+    {
+      assets : List__415060402<Asset__320185087>;
+      exchangeRate : ExchangeRate__285633847;
+      nextAssetId : {var val : Nat};
+      priceCache : Map__605269027<Text, PriceEntry__416406618>
+    };
+  stable historyState :
+    {
+      demoState : Map__605269027<UserId__158757552, DemoState__619124995>;
+      netWorthHistory :
+        Map__605269027<UserId__158757552,
+                        List__415060402<NetWorthSnapshot__498577929>>
+    };
+  stable holdingState :
+    {
+      holdings : List__415060402<Holding__808695228>;
+      nextHoldingId : {var val : Nat}
+    };
+  stable tradeDetectionState :
+    {
+      emailSettings :
+        Map__605269027<UserId__158757552, EmailScanSettings__505180725>;
+      nextTradeId : {var val : Nat};
+      trades :
+        Map__605269027<UserId__158757552,
+                        List__415060402<DetectedTrade__518668811>>
+    };
+  stable txState :
+    {
+      nextTxId : {var val : Nat};
+      transactions : List__415060402<Transaction__822992244>
+    }
+};

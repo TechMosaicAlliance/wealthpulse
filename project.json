@@ -1,0 +1,28 @@
+{
+  "overview": "A mobile-first portfolio tracker with glassmorphic dark UI for monitoring net worth, asset allocation, and passive income across NGN and USD. Features live price feeds, volatility heatmap, and demo data mode.",
+  "features": [
+    "Internet Identity silent sign-in with per-user data isolation",
+    "Demo data mode with $50k pre-loaded portfolio and Nigerian bank alerts",
+    "NGN/USD currency toggle using live exchange rates",
+    "4-tab navigation: Overview, Summary, Accounts, Growth",
+    "Asset allocation donut chart (Stocks, Crypto, Cash)",
+    "Volatility heatmap with Fortress (blue) vs Growth (pulsating orange) assets",
+    "Passive income tracker with auto-calculated annual yield %",
+    "12-month net worth line chart with Total Gain/Loss badge",
+    "Live price feeds via HTTP outcalls (Twelve Data, CoinGecko)",
+    "In-app risk alerts and portfolio rebalancing warnings"
+  ],
+  "category": "finance",
+  "tags": [
+    "portfolio",
+    "finance",
+    "investment",
+    "net-worth",
+    "cryptocurrency",
+    "stocks",
+    "nigeria",
+    "dashboard",
+    "fintech"
+  ],
+  "last_updated": "2026-05-13T07:41:14.619Z"
+}

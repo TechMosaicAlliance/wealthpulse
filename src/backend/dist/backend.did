@@ -1,0 +1,305 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserId = principal;
+type UpdateTransactionArgs = 
+ record {
+   accountId: AccountId;
+   amount: nat;
+   category: TransactionCategory;
+   date: Timestamp;
+   description: text;
+   id: TransactionId;
+ };
+type UpdateHoldingArgs = 
+ record {
+   id: HoldingId;
+   purchaseDate: Timestamp;
+   purchasePrice: float64;
+   quantity: float64;
+ };
+type UpdateEmailScanSettingsArgs = 
+ record {
+   isEnabled: bool;
+   scanIntervalMinutes: nat;
+ };
+type UpdateAssetArgs = 
+ record {
+   assetClass: AssetClass;
+   expectedYieldPct: float64;
+   id: AssetId;
+   isFortress: bool;
+   linkedAccountId: opt AccountId;
+   name: text;
+   ticker: text;
+ };
+type UpdateAccountArgs = 
+ record {
+   balance: nat;
+   currency: text;
+   id: AccountId;
+   institution: text;
+   name: text;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type TransactionView = 
+ record {
+   accountId: AccountId;
+   amount: nat;
+   category: TransactionCategory;
+   createdAt: Timestamp;
+   date: Timestamp;
+   description: text;
+   id: TransactionId;
+   isDemo: bool;
+   owner: UserId;
+ };
+type TransactionId = nat;
+type TransactionCategory = 
+ variant {
+   Dividend;
+   Expense;
+   Income;
+   Interest;
+   Investment;
+   Transfer;
+ };
+type TradeType = 
+ variant {
+   Buy;
+   Sell;
+ };
+type Timestamp = int;
+type RiskBalance = 
+ record {
+   fortressValueUsd: float64;
+   growthPct: float64;
+   growthValueUsd: float64;
+   isAggressive: bool;
+   totalValueUsd: float64;
+ };
+type PriceEntryView = 
+ record {
+   currency: text;
+   price: float64;
+   updatedAt: Timestamp;
+ };
+type PassiveIncomeEntry = 
+ record {
+   annualExpectedUsd: float64;
+   assetId: AssetId;
+   assetName: text;
+   currentValueUsd: float64;
+   expectedYieldPct: float64;
+   monthlyExpectedUsd: float64;
+   receivedYtdUsd: float64;
+   ticker: text;
+ };
+type NetWorthSnapshot = 
+ record {
+   isDemo: bool;
+   timestamp: Timestamp;
+   totalValueNgn: float64;
+   totalValueUsd: float64;
+ };
+type NetWorthResult = 
+ record {
+   exchangeRateNgnPerUsd: float64;
+   holdingsValueNgn: float64;
+   holdingsValueUsd: float64;
+   liquidBalanceNgn: float64;
+   totalNgn: float64;
+   totalUsd: float64;
+ };
+type HoldingView = 
+ record {
+   accountId: AccountId;
+   assetId: AssetId;
+   createdAt: Timestamp;
+   id: HoldingId;
+   isDemo: bool;
+   owner: UserId;
+   purchaseDate: Timestamp;
+   purchasePrice: float64;
+   quantity: float64;
+ };
+type HoldingId = nat;
+type EmailScanSettings = 
+ record {
+   isEnabled: bool;
+   lastScanAt: opt Timestamp;
+   scanIntervalMinutes: nat;
+ };
+type DetectedTradeView = 
+ record {
+   amount: float64;
+   assetClass: AssetClass;
+   assetName: text;
+   confidence: float64;
+   currency: text;
+   detectedAt: Timestamp;
+   id: DetectedTradeId;
+   isDemo: bool;
+   owner: UserId;
+   price: float64;
+   rawText: text;
+   tradeType: TradeType;
+ };
+type DetectedTradeId = nat;
+type CreateTransactionArgs = 
+ record {
+   accountId: AccountId;
+   amount: nat;
+   category: TransactionCategory;
+   date: Timestamp;
+   description: text;
+   isDemo: bool;
+ };
+type CreateHoldingArgs = 
+ record {
+   accountId: AccountId;
+   assetId: AssetId;
+   isDemo: bool;
+   purchaseDate: Timestamp;
+   purchasePrice: float64;
+   quantity: float64;
+ };
+type CreateAssetArgs = 
+ record {
+   assetClass: AssetClass;
+   expectedYieldPct: float64;
+   isDemo: bool;
+   isFortress: bool;
+   linkedAccountId: opt AccountId;
+   name: text;
+   ticker: text;
+ };
+type CreateAccountArgs = 
+ record {
+   accountType: AccountType;
+   balance: nat;
+   currency: text;
+   institution: text;
+   isDemo: bool;
+   name: text;
+ };
+type AssetView = 
+ record {
+   assetClass: AssetClass;
+   createdAt: Timestamp;
+   expectedYieldPct: float64;
+   id: AssetId;
+   isDemo: bool;
+   isFortress: bool;
+   linkedAccountId: opt AccountId;
+   name: text;
+   owner: UserId;
+   ticker: text;
+ };
+type AssetId = nat;
+type AssetClass = 
+ variant {
+   Bond;
+   Cash;
+   Crypto;
+   ETF;
+   Stock;
+ };
+type AccountView = 
+ record {
+   accountType: AccountType;
+   balance: nat;
+   createdAt: Timestamp;
+   currency: text;
+   id: AccountId;
+   institution: text;
+   isDemo: bool;
+   name: text;
+   owner: UserId;
+ };
+type AccountType = 
+ variant {
+   Investment;
+   Liquid;
+ };
+type AccountId = nat;
+service : {
+  _initializeAccessControl: () -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  calculateNetWorth: () -> (NetWorthResult) query;
+  clearDemoData: () -> ();
+  clearDetectedTrades: () -> ();
+  convertDetectedTradeToTransaction: (tradeId: DetectedTradeId, accountId:
+   nat) -> (variant {
+              err: text;
+              ok: nat;
+            });
+  createAccount: (args: CreateAccountArgs) -> (AccountView);
+  createAsset: (args: CreateAssetArgs) -> (AssetView);
+  createHolding: (args: CreateHoldingArgs) -> (HoldingView);
+  createTransaction: (args: CreateTransactionArgs) -> (TransactionView);
+  deleteAccount: (id: AccountId) -> (bool);
+  deleteAsset: (id: AssetId) -> (bool);
+  deleteHolding: (id: HoldingId) -> (bool);
+  deleteTransaction: (id: TransactionId) -> (bool);
+  fetchCryptoPrice: (coinId: text) -> (text);
+  fetchExchangeRate: () -> (text);
+  fetchStockPrice: (ticker: text) -> (text);
+  getAccounts: () -> (vec AccountView) query;
+  getAssets: () -> (vec AssetView) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getDetectedTrades: () -> (vec DetectedTradeView) query;
+  getEmailScanSettings: () -> (EmailScanSettings) query;
+  getExchangeRate: () -> (float64) query;
+  getHoldings: () -> (vec HoldingView) query;
+  getNetWorthHistory: () -> (vec NetWorthSnapshot) query;
+  getPassiveIncome: () -> (vec PassiveIncomeEntry) query;
+  getPriceCache: (ticker: text) -> (opt PriceEntryView) query;
+  getRiskBalance: () -> (RiskBalance) query;
+  getTransactions: () -> (vec TransactionView) query;
+  isCallerAdmin: () -> (bool) query;
+  isDemoLoaded: () -> (bool) query;
+  loadDemoData: () -> ();
+  recordNetWorthSnapshot: (snapshot: NetWorthSnapshot) -> ();
+  simulateEmailScan: () -> (vec DetectedTradeView);
+  storeDetectedTrade: (tradeType: TradeType, assetName: text, assetClass:
+   variant {
+     Bond;
+     Cash;
+     Crypto;
+     ETF;
+     Stock;
+   }, amount: float64, price: float64, currency: text, confidence: float64,
+   rawText: text, isDemo: bool) -> (DetectedTradeView);
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateAccount: (args: UpdateAccountArgs) -> (opt AccountView);
+  updateAsset: (args: UpdateAssetArgs) -> (opt AssetView);
+  updateEmailScanSettings: (args: UpdateEmailScanSettingsArgs) ->
+   (EmailScanSettings);
+  updateHolding: (args: UpdateHoldingArgs) -> (opt HoldingView);
+  updateTransaction: (args: UpdateTransactionArgs) -> (opt TransactionView);
+}

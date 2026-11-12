@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: "Space Grotesk";
+    --font-body: "Inter";
+    --font-mono: "JetBrains Mono", monospace;
+    --radius: 1rem;
+
+    /* WealthPulse dark fintech palette */
+    --background: 0.065 0 0;
+    --foreground: 0.96 0 0;
+    --card: 0.1 0 0;
+    --card-foreground: 0.96 0 0;
+    --popover: 0.12 0 0;
+    --popover-foreground: 0.96 0 0;
+
+    --primary: 0.58 0.22 264;
+    --primary-foreground: 0.98 0 0;
+
+    --secondary: 0.16 0 0;
+    --secondary-foreground: 0.85 0 0;
+    --muted: 0.14 0 0;
+    --muted-foreground: 0.52 0 0;
+
+    --accent: 0.72 0.19 50;
+    --accent-foreground: 0.08 0 0;
+
+    --destructive: 0.58 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+
+    --border: 0.22 0 0;
+    --input: 0.18 0 0;
+    --ring: 0.58 0.22 264;
+
+    --chart-1: 0.58 0.22 264;
+    --chart-2: 0.62 0.25 340;
+    --chart-3: 0.68 0.18 155;
+    --chart-4: 0.72 0.19 50;
+    --chart-5: 0.58 0.22 25;
+
+    --color-stocks: #3b82f6;
+    --color-crypto: #ec4899;
+    --color-cash: #10b981;
+    --color-bonds: #8b5cf6;
+    --color-etf: #06b6d4;
+    --color-gains: #10b981;
+    --color-losses: #ef4444;
+    --color-growth-accent: #f97316;
+    --color-fortress: #3b82f6;
+    --color-warning: #f97316;
+
+    --sidebar: 0.1 0 0;
+    --sidebar-foreground: 0.96 0 0;
+    --sidebar-primary: 0.58 0.22 264;
+    --sidebar-primary-foreground: 0.98 0 0;
+    --sidebar-accent: 0.16 0 0;
+    --sidebar-accent-foreground: 0.85 0 0;
+    --sidebar-border: 0.22 0 0;
+    --sidebar-ring: 0.58 0.22 264;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+    height: 100%;
+  }
+
+  body {
+    @apply text-foreground font-body antialiased;
+    background-color: #0a0a0a;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    height: 100%;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-color: #0a0a0a;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+    --background: 0.97 0 0;
+    --foreground: 0.12 0 0;
+    --card: 1 0 0;
+    --card-foreground: 0.12 0 0;
+    --popover: 1 0 0;
+    --popover-foreground: 0.12 0 0;
+    --primary: 0.5 0.22 264;
+    --primary-foreground: 0.98 0 0;
+    --secondary: 0.93 0 0;
+    --secondary-foreground: 0.15 0 0;
+    --muted: 0.94 0 0;
+    --muted-foreground: 0.48 0 0;
+    --accent: 0.72 0.19 50;
+    --accent-foreground: 0.08 0 0;
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.88 0 0;
+    --input: 0.9 0 0;
+    --ring: 0.5 0.22 264;
+    --color-gains: #16a34a;
+    --color-losses: #dc2626;
+    --color-warning: #ea580c;
+    --color-fortress: #2563eb;
+    --color-growth-accent: #ea580c;
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+  }
+
+  .glass-sm {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+  }
+
+  .heatmap-fortress {
+    background: var(--color-fortress);
+    border-radius: 0.5rem;
+    opacity: 0.85;
+  }
+
+  .heatmap-growth {
+    background: var(--color-growth-accent);
+    border-radius: 0.5rem;
+    animation: pulse-grow 1.5s ease-in-out infinite;
+  }
+
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .text-gains {
+    color: var(--color-gains);
+  }
+  .text-losses {
+    color: var(--color-losses);
+  }
+  .text-warning {
+    color: var(--color-warning);
+  }
+  .bg-stocks {
+    background-color: var(--color-stocks);
+  }
+  .bg-crypto {
+    background-color: var(--color-crypto);
+  }
+  .bg-cash {
+    background-color: var(--color-cash);
+  }
+  .bg-growth-accent {
+    background-color: var(--color-growth-accent);
+  }
+  .bg-fortress {
+    background-color: var(--color-fortress);
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes pulse-grow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-theme="light"] body {
+  background-color: #f5f7fa;
+}
+
+[data-theme="light"] #root {
+  background-color: #f5f7fa;
+}
